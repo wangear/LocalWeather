@@ -43,7 +43,7 @@ class MainViewModel @Inject constructor(private var repository: Repository) : Vi
                 val locationSearchJob = launch {
 
                     list.forEach { locationSearchResData ->
-                        async {
+                        launch {
                             requestWeatherByLocationWithLocationSearch(locationSearchResData)
                         }
                     }
