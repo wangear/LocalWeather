@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="160dp">
+
+        <TextView
+            android:padding="1dp"
+            android:id="@+id/tv_local"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/back_divider"
+            android:gravity="center"
+            android:textColor="@color/black"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="0.15"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/include_today"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/include_today"
+            layout="@layout/item_weather_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintHorizontal_weight="0.45"
+            app:layout_constraintLeft_toRightOf="@+id/tv_local"
+            app:layout_constraintRight_toLeftOf="@+id/include_tomorrow" />
+
+        <include
+            android:id="@+id/include_tomorrow"
+            layout="@layout/item_weather_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:layout_constraintHorizontal_weight="0.45"
+            app:layout_constraintLeft_toRightOf="@+id/include_today"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
