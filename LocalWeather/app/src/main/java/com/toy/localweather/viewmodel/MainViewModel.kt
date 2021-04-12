@@ -1,5 +1,6 @@
 package com.toy.localweather.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +11,9 @@ import com.toy.localweather.repository.data.LocationResData
 import com.toy.localweather.repository.data.LocationSearchResData
 import com.toy.localweather.repository.model.LocalWeatherRecyclerModel
 import com.toy.localweather.repository.model.LocalWeatherRecyclerModelMapper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,15 +38,15 @@ class MainViewModel @Inject constructor(private var repository: Repository) : Vi
             localArrayList.clear()
             _weatherList.value = localArrayList
 
-            val localSearchJob = async {
+            val localSearchJob = async(Dispatchers.IO) {
                 requestLocaleSearch(Constants.LOCALE_VALUE)
             }
 
             localSearchJob.await()?.let { list ->
-                val locationSearchJob = launch {
+                val locationSearchJob = launch(Dispatchers.IO) {
 
                     list.forEach { locationSearchResData ->
-                        launch {
+                        launch(Dispatchers.IO) {
                             requestWeatherByLocationWithLocationSearch(locationSearchResData)
                         }
                     }
@@ -60,6 +63,7 @@ class MainViewModel @Inject constructor(private var repository: Repository) : Vi
     private suspend fun requestWeatherByLocationWithLocationSearch(locationSearchResData: LocationSearchResData) {
         val locationResData =
                 requestWeatherByLocation(locationSearchResData.woeid)
+
         locationResData?.let { it ->
             val itemData = LocalWeatherRecyclerModelMapper.from(
                     it,
